@@ -1,0 +1,687 @@
+{
+  "info": {
+    "_postman_id": "3ad8ed5e-93e7-44df-afb2-9ed2f82469ef",
+    "name": "BankingAPI",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "26698581"
+  },
+  "item": [
+    {
+      "name": "Successful Login Authentication",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const users = pm.response.json();\r",
+              "\r",
+              "const Email = pm.environment.get('ValidEmail');\r",
+              "const Password = pm.environment.get('ValidPassword');\r",
+              "\r",
+              "const matchedUser = users.find(user => \r",
+              "    user.Email === Email && user.Password === Password\r",
+              ");\r",
+              "\r",
+              "if (matchedUser) {\r",
+              "    pm.environment.set(\"login_status\", \"success\");\r",
+              "    pm.environment.set(\"userId\", matchedUser.id);\r",
+              "} else {\r",
+              "    pm.environment.set(\"login_status\", \"failed\");\r",
+              "}\r",
+              "\r",
+              "pm.test(\"User should be authenticated successfully\", () => {\r",
+              "    pm.expect(matchedUser).to.not.be.undefined;\r",
+              "});\r",
+              "if (matchedUser) {\r",
+              "    pm.environment.set(\"login_status\", \"success\");\r",
+              "    pm.environment.set(\"userId\", matchedUser.id);\r",
+              "}\r",
+              "pm.test(\"Status code is 200\", ()=> {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test('matched id should be 1'), ()=> {\r",
+              "    pm.expect(matchedUser.id).to.eql(1);\r",
+              "}\r",
+              "\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{BaseUrl}}/Accounts",
+          "host": [
+            "{{BaseUrl}}"
+          ],
+          "path": [
+            "Accounts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Unsuccessful Login Authentication",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const users = pm.response.json();\r",
+              "\r",
+              "const Email = pm.environment.get('Email');\r",
+              "const InvalidPassword = pm.environment.get('InvalidPassword');\r",
+              "\r",
+              "const matchedUser = users.find(user => \r",
+              "    user.Email === Email && user.Password === InvalidPassword\r",
+              ");\r",
+              "\r",
+              "pm.test(\"User authentication should fail with invalid credentials\", () => {\r",
+              "    pm.expect(matchedUser).to.be.undefined;\r",
+              "});\r",
+              "\r",
+              "if (!matchedUser) {\r",
+              "    pm.environment.set(\"login_status\", \"failed\");\r",
+              "}\r",
+              "\r",
+              "\r",
+              "\r",
+              "\r",
+              "\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"Email\": \"Jo n@gmail.com\",\r\n    \"Password\": \"12343\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{BaseUrl}}/Accounts",
+          "host": [
+            "{{BaseUrl}}"
+          ],
+          "path": [
+            "Accounts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List of Accounts",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const response = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Status code is 200\", () => {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"ID value to be 1\"), () => {\r",
+              "    pm.expect(response[0].id).to.eql(1);\r",
+              "}\r",
+              "\r",
+              "pm.test(\"Length of array\"), () => {\r",
+              "    pm.expect(response.length).to.be.greaterThan(4);\r",
+              "}\r",
+              "\r",
+              "console.log(response[0].id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BaseUrl}}/Accounts",
+          "host": [
+            "{{BaseUrl}}"
+          ],
+          "path": [
+            "Accounts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get a single account",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "const response = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Name in the response should be John Doe\"), ()=> {\r",
+              "    pm.expect(response.Name).to.be.text();\r",
+              "    pm.expect(response.Name).to.eql('John doe');\r",
+              "}\r",
+              "pm.test(\"Name in the response should be a text\"), ()=> {\r",
+              "    pm.expect(response.Name).to.be.text();\r",
+              "}\r",
+              "pm.test(\"Balance in the response should be a number\"), ()=> {\r",
+              "    pm.expect(response.Balance).to.be.a('number');\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BaseUrl}}/Accounts/{{sender_id}}",
+          "host": [
+            "{{BaseUrl}}"
+          ],
+          "path": [
+            "Accounts",
+            "{{sender_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Single account not found",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", ()=> {\r",
+              "    pm.response.to.have.status(404);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BaseUrl}}/Accounts/23",
+          "host": [
+            "{{BaseUrl}}"
+          ],
+          "path": [
+            "Accounts",
+            "23"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Fetch Sender Balance",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const senderbal = pm.response.json();\r",
+              "pm.environment.set('Sender_Bal', senderbal.Balance);\r",
+              "\r",
+              "pm.test('Balance of sender to be greater than 0', () => {\r",
+              "    pm.expect(senderbal.Balance).to.be.greaterThan(0);\r",
+              "});\r",
+              "\r",
+              "pm.test('Email of sender to be valid and to eql Johndoe@example.com', () => {\r",
+              "    pm.expect(senderbal.Email).to.eql('Johndoe@example.com');\r",
+              "})\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BaseUrl}}/Accounts/{{sender_id}}",
+          "host": [
+            "{{BaseUrl}}"
+          ],
+          "path": [
+            "Accounts",
+            "{{sender_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Fetch Receiver Balance",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const receiverbal = pm.response.json();\r",
+              "pm.environment.set('Receiver_Bal', receiverbal.Balance);\r",
+              "\r",
+              "pm.test('receiverbalance should not be null', () => {\r",
+              "    pm.expect(receiverbal.Balance).to.not.be.null;\r",
+              "});\r",
+              "pm.test('receiverbalance should not be undefined', () => {\r",
+              "    pm.expect(receiverbal.Balance).to.not.be.undefined;\r",
+              "});\r",
+              "pm.test('receiverbalance should be a number', ()=> {\r",
+              "    pm.expect(receiverbal.Balance).to.be.a('number');\r",
+              "});\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BaseUrl}}/Accounts/{{receiver_id}}",
+          "host": [
+            "{{BaseUrl}}"
+          ],
+          "path": [
+            "Accounts",
+            "{{receiver_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update Sender & Receiver  Balance",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const senderbalnew =  Number(pm.environment.get('Sender_Bal'));\r",
+              "const receiverbalnew = Number(pm.environment.get('Receiver_Bal'));\r",
+              "const amount = Number(pm.environment.get('transferamount'));\r",
+              "\r",
+              "if (amount > senderbalnew) {\r",
+              "    throw new Error ('Insufficient Balance for transfer');\r",
+              "}\r",
+              "\r",
+              "const newsender = senderbalnew -amount;\r",
+              "const newreceiver= receiverbalnew + amount;\r",
+              "pm.environment.set('Sender_Bal', newsender);\r",
+              "pm.environment.set('Receiver_Bal', newreceiver);\r",
+              "pm.environment.set('current_timestamp', new Date().toISOString());\r",
+              "\r",
+              "pm.test(\"Amount should be valid number\", () => {\r",
+              "     pm.expect(amount).to.not.be.NaN;\r",
+              "});\r",
+              "pm.test(\"Sender has sufficient balance\", () => {\r",
+              "    pm.expect(amount).to.be.at.most(senderbalnew);\r",
+              "});\r",
+              "pm.test('sender balance updated successfully', ()=> {\r",
+              "    pm.expect(newsender).to.equal(senderbalnew - amount);\r",
+              "});\r",
+              "\r",
+              "pm.test('sender balance should not be negative', ()=>{\r",
+              "    pm.expect(newsender).to.be.at.least(0);\r",
+              "});\r",
+              "pm.test('receiver balance updated successfully', ()=> {\r",
+              "    pm.expect(newreceiver).to.equal(receiverbalnew + amount);\r",
+              "});\r",
+              "\r",
+              "\r",
+              "\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"Balance\": {{Sender_Bal}}\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{BaseUrl}}/Accounts/{{sender_id}}",
+          "host": [
+            "{{BaseUrl}}"
+          ],
+          "path": [
+            "Accounts",
+            "{{sender_id}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Transactions Record",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 201\", function () {\r",
+              "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response time is less than 200ms\", function () {\r",
+              "    pm.expect\r",
+              "});\r",
+              "\r",
+              "pm.test('Status of the transaction should be success', ()=>{\r",
+              "    pm.expect(pm.response.json().Status).to.eql('success');\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const amount = Number(pm.globals.get(\"transferamount\"));\r",
+              "const senderBal = Number(pm.environment.get(\"Sender_Bal\"));\r",
+              "\r",
+              "\r",
+              "let status = \"success\";\r",
+              "\r",
+              "if (amount > senderBal) {\r",
+              "    status = \"failed\";\r",
+              "}\r",
+              "\r",
+              "const timestamp = new Date().toISOString();\r",
+              "\r",
+              "pm.environment.set(\"calculated_status\", status);\r",
+              "pm.environment.set(\"calculated_timestamp\", timestamp);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"FromAccount\": \"{{sender_id}}\",\r\n  \"ToAccount\": \"{{receiver_id}}\",\r\n  \"Amount\": \"{{transferamount}}\",\r\n  \"Type\": \"transfer\",\r\n  \"Status\": \"{{calculated_status}}\",\r\n  \"Timestamp\": \"{{calculated_timestamp}}\"\r\n}\r\n",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{BaseUrl}}/Transactions",
+          "host": [
+            "{{BaseUrl}}"
+          ],
+          "path": [
+            "Transactions"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Transaction History",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "const response = pm.response.json();\r",
+              "pm.test(\"Response body is an array\", function () {\r",
+              "    pm.expect(response).to.be.an('array');\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Array contains at least two elements\", function () {\r",
+              "    pm.expect(response).to.have.lengthOf.at.least(2);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{BaseUrl}}/Transactions",
+          "host": [
+            "{{BaseUrl}}"
+          ],
+          "path": [
+            "Transactions"
+          ],
+          "query": [
+            {
+              "key": "fromAccount",
+              "value": "{{sender_id}}",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete an account",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 404\", function () {\r",
+              "    pm.response.to.have.status(404);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{BaseUrl}}/Accounts/6",
+          "host": [
+            "{{BaseUrl}}"
+          ],
+          "path": [
+            "Accounts",
+            "6"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "BaseUrl",
+      "value": ""
+    }
+  ]
+}
